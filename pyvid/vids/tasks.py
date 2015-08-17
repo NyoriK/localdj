@@ -16,13 +16,10 @@ def get_upload_file_name(video):
 def timer(start_time,end_time):
     hours, rem = divmod(end_time-start_time, 3600)
     minutes, seconds = divmod(rem, 60)
-    return ("{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds))    
+    return ("{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds))
 
-# if aws cloudfront
-# from pyvid.settings import s3_MEDIA_URL
 
-# if only aws s3
-from pyvid.settings import MEDIA_URL
+from pyvid.settings import MEDIA_ROOT
 
 from django.core.files import File
 
@@ -38,10 +35,8 @@ def convert_video(video_id):
     video = Video.objects.get(id=video_id)
 
     # If on same machine
-    # video_path = str(MEDIA_ROOT)+'/'+str(video.original_video)
+    video_path = str(MEDIA_ROOT)+'/'+str(video.original_video)
 
-    # For s3
-    video_path = str(MEDIA_URL) + str (video.original_video)
     name = str(get_upload_file_name(video))
     convert_video_name_720 = '720-'+ name +'.mp4'
     convert_video_name_480 = '480-'+ name +'.mp4'
@@ -111,7 +106,7 @@ def convert_video(video_id):
 #             ffmpeg -i %s \
 #                 -codec:v libx264 -tune zerolatency -profile:v main -preset superfast -b:v 1000k -maxrate 1000k -bufsize 10000k -vf scale="trunc(oh*a/2)*2:720" -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile %s -codec:a libfdk_aac -movflags +faststart %s \
 #                 -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset superfast -b:v 500k -maxrate 500k -bufsize 5000k -vf scale="trunc(oh*a/2)*2:480" -threads 0 -pass 2 -passlogfile %s -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart %s
-#         """ % (video_path, unique_pass_id_720, unique_pass_id_480, video_path, unique_pass_id_720, convert_video_name_720, unique_pass_id_480, convert_video_name_480)    
+#         """ % (video_path, unique_pass_id_720, unique_pass_id_480, video_path, unique_pass_id_720, convert_video_name_720, unique_pass_id_480, convert_video_name_480)
 #     start_time = time()
 #     proc = Popen(
 #         cmd,
