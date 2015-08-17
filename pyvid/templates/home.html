@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+            <div class="container">
+                <div class="row">
+                    <h2>All videos!</h2>
+                </div>
+                
+                <div class="row">
+                    {% if videos.count != 0 %}
+                        <p></p>
+                        {% for vid in videos %}
+                            {% if vid.converted %}
+                                <div class="video-wrapper col-lg-2 col-md-4 col-sm-2">
+                                    <div class="video-thumbnail">
+                                        <img src="{{ MEDIA_URL}}{{vid.poster}}">
+                                        <a href="/video/{{ vid.pk }}/"> <span class="glyphicon glyphicon-play video-play"></span> </a>
+                                        <span class="glyphicon glyphicon-info-sign video-info"></span>
+                                    </div>
+                                    <div class="video-description">
+                                        <p class="title">{{vid.title}}</p>
+                                        <div class="video-upload-info">
+                                            <p class="by">Franschisil</p>
+                                            <p class="pubdate">{{vid.pubdate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p>No videos!</p>
+                    {% endif %}
+
+                </div>
+            <p></p>
+            </div>
+        </div>
+
+{% endblock %}

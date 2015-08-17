@@ -1,0 +1,203 @@
+ffmpeg -i catoutput.mp4 -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 500k -maxrate 500k -bufsize 1000k -s hd720 format=yuv420p -threads 0 -codec:a libfdk_aac -movflags +faststart try1.mp4
+
+ffmpeg -i alien.MOV -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 500k -maxrate 500k -bufsize 1000k  -s hd720 -threads 0 -codec:a libfdk_aac -movflags +faststart aliens1.mp4
+
+ffmpeg -i alien.MOV -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -crf 23 -maxrate 1500k -bufsize 1500k  -s hd720 -threads 0 -codec:a libfdk_aac -movflags +faststart aliens-try-maxandbuf.mp4
+
+
+``````````````mp4`````````````
+
+# hd720
+
+ffmpeg -i name -codec:v libx264 -tune zerolatency -profile:v main -preset medium -crf 23 -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/ios-hd720-profilemain-presetmedium-bit1000-max1000k-buf10000-1pass.mp4
+
+
+TRIAL 
+
+ffmpeg -i 149.mp4 -codec:v libx264 -r 15 -tune zerolatency -profile:v main -preset ultrafast -crf 23 -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/149-r15-hd720-profilemain-presetultrafast-crf23-max1000k-buf10000.mp4
+
+
+
+
+# hd720 2pass
+
+ffmpeg -i mi6.mp4 -codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 /dev/null
+
+ffmpeg -i mi6.mp4 -codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/mi6-hd720-profilemain-presetmedium-bit1000-max1000k-buf10000-2pass.mp4
+
+
+
+
+# 480p
+
+ffmpeg -i name -codec:v libx264 -tune zerolatency -profile:v main -preset medium -crf 23 -maxrate 1000k -bufsize 10000k -s hd480 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/ios-hd720-profilemain-presetmedium-bit1000-max1000k-buf10000-1pass.mp4
+
+
+
+
+
+
+# 360p 2pass
+
+ffmpeg -i mi6.mp4 -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pix_fmt yuv420p -movflags +faststart -pass 1 -passlogfile unique-360 -an -f mp4 /dev/null && \
+ffmpeg -i mi6.mp4 -codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pass 2 -passlogfile unique-360 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart 360.mp4
+
+
+
+# one input multiple output
+
+ffmpeg -i input \
+	-s 1280x720 -acodec … -vcodec … output1 \
+	-s 640x480  -acodec … -vcodec … output2 \
+	-s 320x240  -acodec … -vcodec … output3
+
+
+#two pass multiple
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pix_fmt yuv420p -movflags +faststart -pass 1 -passlogfile unique_id-360 -an -f mp4 /dev/null && \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/mi6-poty-720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pass 2 -passlogfile unique_id-360 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/mi6-poty-360.mp4
+
+
+
+
+ffmpeg -i alien.mov \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-360 -an -f mp4 /dev/null && \
+ffmpeg -i alien.mov \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/2pass-faster-alien720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pass 2 -passlogfile unique_id-360 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/2pass-faster-alien360.mp4
+
+
+
+TRIAL
+
+ffmpeg -i hologram.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-360 -an -f mp4 /dev/null && \
+ffmpeg -i hologram.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/2pass-faster-hologram720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pass 2 -passlogfile unique_id-360 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/2pass-faster-hologram360.mp4
+
+ffmpeg -i 149.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-360 -an -f mp4 /dev/null && \
+ffmpeg -i 149.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/2pass-faster-149720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 250k -maxrate 250k -bufsize 2500k -vf scale="trunc(oh*a/2)*2:360" -threads 0 -pass 2 -passlogfile unique_id-360 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/2pass-faster-149360.mp4
+
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd720 -an -f mp4 -y /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pix_fmt yuv420p -pass 1 -passlogfile unique_id-hd480 -an -f mp4 -y /dev/null && \
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/final/2pass-faster-mi6720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pass 2 -passlogfile unique_id-hd480 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/2pass-faster-mi6480.mp4
+
+
+
+
+#### hd720 + hd480
+
+ffmpeg -i alien.mov \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p  -movflags +faststart -pass 1 -passlogfile unique_id-hd720 -an -f mp4 -y /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pix_fmt yuv420p  -movflags +faststart -pass 1 -passlogfile unique_id-hd480 -an -f mp4 -y /dev/null && \
+ffmpeg -i alien.mov \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/final/2pass-faster-alien720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pass 2 -passlogfile unique_id-hd480 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/2pass-faster-alien480.mp4
+
+ffmpeg -i cat.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p  -movflags +faststart -pass 1 -passlogfile unique_id-hd720 -an -f mp4 -y /dev/null \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pix_fmt yuv420p  -movflags +faststart -pass 1 -passlogfile unique_id-hd480 -an -f mp4 -y /dev/null && \
+ffmpeg -i cat.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -pass 2 -passlogfile unique_id-hd720 -codec:a libfdk_aac -movflags +faststart output/final/2pass-faster-cat720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -pass 2 -passlogfile unique_id-hd480 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/2pass-faster-cat480.mp4
+
+
+
+
+# multiple
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/mi6-multiple720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/mi6-multiple360.mp4
+
+ffmpeg -i alien.mov \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/medium-single_pass-alien720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/medium-single_pass-alien480.mp4
+
+ffmpeg -i cat.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/medium-single_pass-cat720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -level 3.0 -preset medium -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/medium-single_pass-cat480.mp4
+
+ffmpeg -i cat.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -crf 23 -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/medium-crf23-single_pass-cat720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -preset medium -crf 23 -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/medium-crf23-single_pass-cat480.mp4
+
+ffmpeg -i cat.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -crf 23 -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/faster-crf23-single_pass-cat720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -preset faster -crf 23 -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/faster-crf23-single_pass-cat480.mp4
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -crf 23 -maxrate 1000k -bufsize 10000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/faster-crf23-single_pass-mi6720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -crf 23 -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/faster-crf23-single_pass-mi6480.mp4	
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset faster -b:v 1100k -maxrate 1100k -bufsize 11000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/faster-bit1100k-single_pass-mi6720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/faster-bit500k-single_pass-mi6480.mp4
+
+ffmpeg -i mi6.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v main -preset medium -b:v 1000k -maxrate 1100k -bufsize 11000k -s hd720 -threads 0 -pix_fmt yuv420p -codec:a libfdk_aac -movflags +faststart output/final/medium-bit1000k-single_pass-mi6720.mp4 \
+	-codec:v libx264 -tune zerolatency -profile:v baseline -preset faster -b:v 500k -maxrate 500k -bufsize 5000k -s hd480 -threads 0 -codec:a libfdk_aac -pix_fmt yuv420p -movflags +faststart output/final/faster-bit500k-single_pass-mi6480.mp4
+
+
+
+
+
+
+
+````````````webm`````````````
+
+
+
+ffmpeg -i input_file.avi -codec:v libvpx -quality good -cpu-used 0 -b:v 600k -maxrate 600k -bufsize 1200k -qmin 10 -qmax 42 -s hd720 -threads 4 -codec:a vorbis -b:a 128k output_file.webm
+
+
+
+
+
+import subprocess
+
+cmd_dimenstion = """ffprobe -v error -show_entries stream=width,height \
+...   -of default=noprint_wrappers=1 cat.mp4"""
+dimension = subprocess.check_output(cmd_dimenstion)
+
+cmd_duration = "ffmpeg -i file.mp4 2>&1 | grep Duration | awk '{print $2}' | tr -d ,"
+
+duration = subprocess.check_output(cmd_duration)
+
+
+
+
+>>> re.sub(r'[^a-zA-Z0-9_-]', '',s)
+'thissisaadkfl3094dfassldf_s-cript'
+
+
+
+# Validate file
+
+import magic
+magic.from_file('cat.mp4')
+'ISO Media, MP4 Base Media v1 [IS0 14496-12:2003]'
+magic.from_file('cat.mp4',mime=True)
+'video/mp4'
+magic.from_file('test.mp4',mime=True)
+'text/plain'
+magic.from_file('android.mp4',mime=True)
+'video/mp4'
+magic.from_file('ios.mov',mime=True)
+'video/quicktime'
+magic.from_file('check.mov',mime=True)
+'text/x-python'

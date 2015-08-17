@@ -1,0 +1,18 @@
+subprocess.call('ffmpeg -i %s -codec:v libx264 -profile: high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k scale="720:trunc(ow/a/2)*2" -threads 0 -codec:a libfdk_aac -b:a 128k %s' % (name, convert_video_name) )
+
+
+
+'ffmpeg -i %s -codec:v libx264 -profile: high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k -vf scale=-1:480 -threads 0 -codec:a libfdk_aac -b:a 128k %s' % ('http://localhost:8000/media/'+str(video.original_video), convert_video_name )
+
+
+'ffmpeg -i %s -vf scale=720x406,setsar=1:1 %s' % ('http://localhost:8000/media/'+str(video.original_video), convert_video_name )
+
+
+ffmpeg -i input.mov -vf scale=720x406,setsar=1:1 output.mov
+
+subprocess.call('ffmpeg -i %s -codec:v libx264 -profile: high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k scale="720:trunc(ow/a/2)*2" -threads 0 -codec:a libfdk_aac -b:a 128k %s' % (input_file, get_upload_file_name(input_file)) )
+
+
+ffmpeg -i https://s3-us-west-2.amazonaws.com/yesme/1437316389_4_phasna_hi_parega.mp4 -codec:v libx264 -crf 23 -preset medium -codec:a libfdk_aac -vbr 4 \-movflags faststart -vf scale=-1:720,format=yuv420p ubuntufromaws.mp4
+
+ffmpeg -i https://s3-us-west-2.amazonaws.com/yesme/1437316389_4_phasna_hi_parega.mp4 -codec:v libx264 -crf 23 -preset medium -codec:a libfdk_aac -vbr 4 \-movflags faststart -vf scale=-"720:trunc(ow/a/2)*2",format=yuv420p ubuntufromaws.mp4

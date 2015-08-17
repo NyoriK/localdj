@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        {% if form.errors %}
+            <p class="error">Sorry, not a valid Video File!</p>
+        {% endif %}
+
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" name="submit" value="Upload">
+        </form>
+    </div>
+
+{% endblock %}

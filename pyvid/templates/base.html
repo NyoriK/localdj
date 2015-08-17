@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title</title>
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css">
+
+        <!-- For video js -->
+        <!-- <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet"> -->
+
+        <!-- For mediaelement.js -->
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/custom.js"></script>
+
+<!--        video player-->
+        <script src="{{ STATIC_URL }}mediaelement/mediaelement-and-player.min.js"></script>
+        <script src="{{ STATIC_URL }}mediaelement/mep-feature-sourcechooser.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}mediaelement/custom-video-player.js"></script>
+        
+        <link rel="stylesheet" href="{{ STATIC_URL }}mediaelement/mediaelementplayer.min.css" />        
+
+    </head>
+    <body>
+        
+        <div id="navbar_header">
+            <ul class="nav_links">
+                <li class="nav" id="settings-nav">
+                    <a href="/upload_video/">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </button>
+                    </a>
+                </li>
+                <li class="nav" id="home-nav">
+                    <a href="/">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-home"></span>
+                        </button>
+                    </a>
+                </li>
+                <span class="clear_both"></span>
+            </ul>
+        </div>
+        
+        <div id="main_content">
+            {% block content %}}
+                <p>Something here...</p>
+            {%  endblock %}
+        </div>
+        
+        <div id="navbar_footer">
+            <ul class="nav_links">
+                <li class="nav" id="search-nav">
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </li>
+                <li class="nav" id="thumbnail-nav">
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-th-large"></span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/custom.js"></script>
+
+<!--        video player-->
+        <script src="{{ STATIC_URL }}mediaelement/mediaelement-and-player.min.js"></script>
+        <script src="{{ STATIC_URL }}mediaelement/mep-feature-sourcechooser.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}mediaelement/custom-video-player.js"></script>
+
+    </body>
+</html>
